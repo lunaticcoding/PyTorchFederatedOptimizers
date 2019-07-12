@@ -11,12 +11,12 @@ class FederatedAvgServer(Optimizer):
             parameter groups
 
     Example:
-        >>> optimizers = torch.optim.FederatedAvgServer(model.parameters())
+        >>> optimizers = optimizers.FederatedAvgServer(model.parameters())
         >>> optimizers.zero_grad()
         >>> loss_fn(model(input), target).backward()
         >>>
         >>> # On every client then do
-        >>> optimizer_client = torch.optim.FederatedAvgClient(model.parameters(), lr=0.1)
+        >>> optimizer_client = optimizers.FederatedAvgClient(model.parameters(), lr=0.1)
         >>> optimizer_client.zero_grad()
         >>> loss_fn(model(input), target).backward()
         >>> optimizer_client.step()

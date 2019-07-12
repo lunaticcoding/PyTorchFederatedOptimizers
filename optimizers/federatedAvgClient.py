@@ -13,7 +13,7 @@ class FederatedAvgClient(Optimizer):
         weight_decay (float, optional): weight decay (L2 penalty) (default: 0)
 
     Example:
-        >>> optimizers = torch.optim.FederatedAvgClient(model.parameters(), lr=0.1)
+        >>> optimizers = optimizers.FederatedAvgClient(model.parameters(), lr=0.1)
         >>> optimizers.zero_grad()
         >>> loss_fn(model(input), target).backward()
         >>> optimizers.step()
