@@ -6,8 +6,8 @@
 
 ### Usage
 ```
-optimizers = optimizers.FederatedAvgServer(model.parameters())
-optimizers.zero_grad()
+optimizer = optimizers.FederatedAvgServer(model.parameters())
+optimizer.zero_grad()
 loss_fn(model(input), target).backward()
 
 # On every client then do
