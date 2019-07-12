@@ -54,7 +54,6 @@ class FederatedAvgClient(Optimizer):
 
                 if weight_decay != 0:
                     d_p.add_((weight_decay*(-group['lr'])), p.data)
-                else:
-                    p.data.add_(-group['lr'], d_p)
+                p.data.add_(-group['lr'], d_p)
 
         return loss
