@@ -2,7 +2,7 @@
 ## What is Federated Learning?
 > Federated Learning is a distributed machine learning approach which enables model training on a large corpus of decentralized data. 
 
-> _From Towards Federated Learning at Scale: System Design_
+_From Towards Federated Learning at Scale: System Design_
 
 
 ## Federated Averaging 
