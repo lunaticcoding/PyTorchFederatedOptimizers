@@ -3,30 +3,34 @@ from optimizer import Optimizer, required
 
 
 class FederatedAvgServer(Optimizer):
-    r"""Implements federated averaging.
-
+    r"""Implements the server side of the federated averaging algorithm presented in the paper
+    'Communication-Efficient Learning of Deep Networks from Decentralized Data' (https://arxiv.org/pdf/1602.05629.pdf).
 
     Args:
         params (iterable): iterable of parameters to optimize or dicts defining
             parameter groups
-        lr (float): learning rate
-        weight_decay (float, optional): weight decay (L2 penalty) (default: 0)
 
     Example:
-        >>> optimizer = torch.optim.FederatedAvgServer(model.parameters(), lr=0.1)
+        >>> optimizer = torch.optim.FederatedAvgServer(model.parameters())
         >>> optimizer.zero_grad()
         >>> loss_fn(model(input), target).backward()
+        >>>
+        >>> # On every client then do
+        >>> optimizer_client = torch.optim.FederatedAvgClient(model.parameters(), lr=0.1)
+        >>> optimizer_client.zero_grad()
+        >>> loss_fn(model(input), target).backward()
+        >>> optimizer_client.step()
+        >>> nk_grad = (n_training_examples, model.parameters())
+        >>>
+        >>> # Send nk_grad from clients (1 to l) to the server
+        >>> list_nk_grad = [nk_grad1, ..., nk_gradl]
         >>> optimizer.step(list_nk_grad)
+        >>> # Redistribute updated model.parameters() from server to clients
     """
 
-    def __init__(self, params, dampening=0,
-                 weight_decay=0):
-        if weight_decay < 0.0:
-            raise ValueError("Invalid weight_decay value: {}".format(weight_decay))
+    def __init__(self, params):
 
-        defaults = dict(dampening=dampening,
-                        weight_decay=weight_decay)
-        super(FederatedAvgServer, self).__init__(params, defaults)
+        super(FederatedAvgServer, self).__init__(params, {})
 
     def __setstate__(self, state):
         super(FederatedAvgServer, self).__setstate__(state)
