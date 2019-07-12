@@ -48,17 +48,18 @@ class FederatedAvgServer(Optimizer):
 
         for group in self.param_groups:
             for p in group['params']:
-                p.data = torch.zeros_like(p.data)
+                # set old weights to 0
+                p.data.add_(-p.data)
 
         n = 0
         for group in self.param_groups:
+            for n_k, _ in list_nk_grad:
+                n += n_k
             for n_k, w_k in list_nk_grad:
                 for p, w_k_p in zip(group['params'], list(w_k)):
                     if w_k_p.grad is None:
                         continue
-                    p.data += w_k_p.data * n_k
-                n += n_k
+                    p.data.add_(w_k_p.data * n_k/n)
+        print(self.param_groups)
 
-        for p in group['params']:
-            p.data /= n
         return loss
