@@ -29,8 +29,7 @@ class FederatedAvgServer(Optimizer):
     """
 
     def __init__(self, params):
-
-        super(FederatedAvgServer, self).__init__(params, {})
+        super(FederatedAvgServer, self).__init__(params, dict())
 
     def __setstate__(self, state):
         super(FederatedAvgServer, self).__setstate__(state)
