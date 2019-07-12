@@ -11,8 +11,8 @@ class FederatedAvgServer(Optimizer):
             parameter groups
 
     Example:
-        >>> optimizer = torch.optim.FederatedAvgServer(model.parameters())
-        >>> optimizer.zero_grad()
+        >>> optimizers = torch.optim.FederatedAvgServer(model.parameters())
+        >>> optimizers.zero_grad()
         >>> loss_fn(model(input), target).backward()
         >>>
         >>> # On every client then do
@@ -24,7 +24,7 @@ class FederatedAvgServer(Optimizer):
         >>>
         >>> # Send nk_grad from clients (1 to l) to the server
         >>> list_nk_grad = [nk_grad1, ..., nk_gradl]
-        >>> optimizer.step(list_nk_grad)
+        >>> optimizers.step(list_nk_grad)
         >>> # Redistribute updated model.parameters() from server to clients
     """
 
