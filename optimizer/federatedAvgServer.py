@@ -21,7 +21,6 @@ class FederatedAvgServer(Optimizer):
 
     def __init__(self, params, dampening=0,
                  weight_decay=0):
-        self.n = 0
         if weight_decay < 0.0:
             raise ValueError("Invalid weight_decay value: {}".format(weight_decay))
 
@@ -44,22 +43,19 @@ class FederatedAvgServer(Optimizer):
         if closure is not None:
             loss = closure()
 
-        if self.n == 0:
-            for group in self.param_groups:
-                for p in group['params']:
-                    p.data = torch.zeros_like(p.data)
+        for group in self.param_groups:
+            for p in group['params']:
+                p.data = torch.zeros_like(p.data)
 
+        n = 0
         for group in self.param_groups:
             for n_k, w_k in list_nk_grad:
                 for p, w_k_p in zip(group['params'], list(w_k)):
                     if w_k_p.grad is None:
                         continue
-                    print(p.data.shape)
-                    print(w_k_p.data.shape)
                     p.data += w_k_p.data * n_k
-                self.n += n_k
+                n += n_k
 
-        # TODO maybe fix self.n at max value at some point???
         for p in group['params']:
-            p.data /= self.n
+            p.data /= n
         return loss
