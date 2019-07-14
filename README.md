@@ -28,3 +28,4 @@ list_nk_grad = [nk_grad1, ..., nk_gradl]
 optimizers.step(list_nk_grad)
 # Redistribute updated model.parameters() from server to clients
 ```
+
