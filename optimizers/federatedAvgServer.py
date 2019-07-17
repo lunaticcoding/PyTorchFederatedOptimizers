@@ -51,10 +51,8 @@ class FederatedAvgServer(Optimizer):
                 # set old weights to 0
                 p.data.add_(-p.data)
 
-        n = 0
         for group in self.param_groups:
-            for n_k, _ in list_nk_grad:
-                n += n_k
+            n = sum([n_k for n_k, _ in list_nk_grad])
             for n_k, w_k in list_nk_grad:
                 for p, w_k_p in zip(group['params'], list(w_k)):
                     if w_k_p.grad is None:
