@@ -29,3 +29,12 @@ optimizers.step(list_nk_grad)
 # Redistribute updated model.parameters() from server to clients
 ```
 
+## Federated Stochastic Variance Reduced Gradient Decent (FSVRG)
+### Description
+- [Federated Optimization: Distributed Machine Learning for On-Device Intelligence](https://www.maths.ed.ac.uk/~prichtar/papers/federated_optimization.pdf)
+<img width="764" alt="Screenshot 2019-07-18 at 20 07 42" src="https://user-images.githubusercontent.com/26603883/61481211-ee9e0500-a997-11e9-8dce-aba143c77691.png">
+<img width="751" alt="Screenshot 2019-07-18 at 20 07 33" src="https://user-images.githubusercontent.com/26603883/61481269-2442ee00-a998-11e9-897a-d8324860e6f5.png">
+
+### Usage
+
+#### I am currently working on this and I hope I will be able to have at least a rough outline online with in the next 2 days.
