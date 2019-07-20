@@ -3,7 +3,8 @@ from optimizer import Optimizer, required
 
 
 class FSVRGClient(Optimizer):
-    r"""Implements federated averaging.
+    r"""Implements the client side of the stochastic variance reduced gradient descent algorithm presented in the paper
+    'Federated Optimization: Distributed Machine Learning for On-Device Intelligence' (https://www.maths.ed.ac.uk/~prichtar/papers/federated_optimization.pdf).
 
 
     Args:
@@ -11,12 +12,18 @@ class FSVRGClient(Optimizer):
             parameter groups
         lr (float): learning rate
         weight_decay (float, optional): weight decay (L2 penalty) (default: 0)
+        a (Tensor): aggregated scaling matrix a
 
     Example:
         >>> optimizer = optimizers.FSVRGClient(model.parameters(), lr=0.1)
         >>> optimizer.zero_grad()
         >>> loss_fn(model(input), target).backward()
-        >>> optimizers.step()
+        >>> s = optimizer.compute_stochastic_gradient_scaling_matrix_s()
+        >>> # send s to Server
+
+        >>> # receive aggregated scaling matrix a from Server
+        >>> optimizer_client.step(a)
+
     """
 
     def __init__(self, params, lr=1, dampening=0,
@@ -35,7 +42,7 @@ class FSVRGClient(Optimizer):
     def __setstate__(self, state):
         super(FSVRGClient, self).__setstate__(state)
 
-    def compute_scaling_matrix_s(self, data):
+    def compute_stochastic_gradient_scaling_matrix_s(self, data):
         data_shape = data.shape
         self.n_k = data_shape[0]
         data.apply_(lambda x: 0.0 if x == 0.0 else 1.0)
@@ -45,7 +52,7 @@ class FSVRGClient(Optimizer):
 
         # sum over first shape column
 
-    def step(self, n_k=required, closure=None):
+    def step(self, a, n_k=required, closure=None):
         """Performs a single optimization step.
 
         Arguments:

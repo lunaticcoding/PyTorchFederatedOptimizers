@@ -3,8 +3,8 @@ from optimizer import Optimizer, required
 
 
 class FSVRGServer(Optimizer):
-    r"""Implements the server side of the federated averaging algorithm presented in the paper
-    'Communication-Efficient Learning of Deep Networks from Decentralized Data' (https://arxiv.org/pdf/1602.05629.pdf).
+    r"""Implements the server side of the stochastic variance reduced gradient descent algorithm presented in the paper
+    'Federated Optimization: Distributed Machine Learning for On-Device Intelligence' (https://www.maths.ed.ac.uk/~prichtar/papers/federated_optimization.pdf).
 
     Args:
         params (iterable): iterable of parameters to optimize or dicts defining
@@ -19,9 +19,12 @@ class FSVRGServer(Optimizer):
         >>> optimizer_client = optimizers.FSVRGClient(model.parameters(), lr=0.1)
         >>> optimizer_client.zero_grad()
         >>> loss_fn(model(input), target).backward()
-        >>> optimizer_client.step()
-        >>> nk_grad = (n_training_examples, model.parameters())
+        >>> s = optimizer_client.compute_stochastic_gradient_scaling_matrix_s()
         >>>
+        >>> # send a to clients (and then on Clients)
+        >>> optimizer_client.step(a)
+        >>> optimizer.compute_aggregated_scaling_matrix_a(list_of_s)
+
         >>> # Send nk_grad from clients (1 to l) to the server
         >>> list_nk_grad = [nk_grad1, ..., nk_gradl]
         >>> optimizers.step(list_nk_grad)
