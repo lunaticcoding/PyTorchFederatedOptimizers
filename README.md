@@ -37,4 +37,4 @@ optimizers.step(list_nk_grad)
 
 ### Usage
 
-#### I am currently working on this and I hope I will be able to have at least a rough outline online with in the next 2 days.
+#### Work in progress
