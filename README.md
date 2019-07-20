@@ -37,4 +37,24 @@ optimizers.step(list_nk_grad)
 
 ### Usage
 
-#### Work in progress
+#### The following is preliminary and may be different in the final implementation
+```
+optimizer = optimizers.FSVRGServer(model.parameters())
+optimizer.zero_grad()
+loss_fn(model(input), target).backward()
+
+# On every client then do
+optimizer_client = optimizers.FSVRGClient(model.parameters(), lr=0.1)
+optimizer_client.zero_grad()
+loss_fn(model(input), target).backward()
+s = optimizer_client.compute_stochastic_gradient_scaling_matrix_s()
+
+# send a to clients (and then on Clients)
+optimizer_client.step(a)
+optimizer.compute_aggregated_scaling_matrix_a(list_of_s)
+
+# Send nk_grad from clients (1 to l) to the server
+list_nk_grad = [nk_grad1, ..., nk_gradl]
+optimizers.step(list_nk_grad)
+# Redistribute updated model.parameters() from server to clients
+```
