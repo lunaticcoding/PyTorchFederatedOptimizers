@@ -4,9 +4,9 @@ import math
 class DummyNetwork:
     def __init__(self, list_of_weights=None, list_of_grads=None):
         if not list_of_weights:
-            list_of_weights = []
+            list_of_weights = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         if not list_of_grads:
-            list_of_grads = []
+            list_of_grads = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         self.gradients = [torch.Tensor(grad) for grad in list_of_grads]
         self.data = [torch.Tensor(weight) for weight in list_of_weights]
 
