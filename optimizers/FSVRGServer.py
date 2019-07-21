@@ -41,11 +41,14 @@ class FSVRGServer(Optimizer):
 
     def get_phi_and_compute_A(self, phi_ks):
         phi = sum(phi_ks)
-        #w_j = torch.Tensor(phi_ks).apply_(lambda x: 0.0 if x == 0.0 else 1.0)
-        #K = torch.full_like(w_j, len(phi_ks))
-        #a_j = K.div_(w_j)
-        #self.A = np.diag(a_j)
+        self._compute_and_set_A(phi_ks)
         return phi
+
+    def _compute_and_set_A(self, phi_ks):
+        w_j = sum(torch.Tensor(phi_ks).apply_(lambda x: 0.0 if x == 0.0 else 1.0))
+        K = torch.full_like(w_j, len(phi_ks))
+        a_j = K.div(w_j)
+        self.A = torch.Tensor(np.diag(a_j))
 
     def step(self, list_nk_grad, closure=None):
         """Performs a single optimization step.
