@@ -42,17 +42,15 @@ class FSVRGClient(Optimizer):
     def __setstate__(self, state):
         super(FSVRGClient, self).__setstate__(state)
 
-    def compute_stochastic_gradient_scaling_matrix_s(self, data):
-        data_shape = data.shape
-        self.n_k = data_shape[0]
+    def compute_nonzero_features_on_node_phi_k(self, data):
+        self.n_k = len(data)
         data.apply_(lambda x: 0.0 if x == 0.0 else 1.0)
-        s_k = sum([t for t in data])
-        return s_k
+        phi_k = sum([t for t in data])
+        phi_k /= self.n_k
+        return phi_k
 
 
-        # sum over first shape column
-
-    def step(self, a, n_k=required, closure=None):
+    def step(self, phi, closure=None):
         """Performs a single optimization step.
 
         Arguments:
