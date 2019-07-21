@@ -47,11 +47,13 @@ loss_fn(model(input), target).backward()
 optimizer_client = optimizers.FSVRGClient(model.parameters(), lr=0.1)
 optimizer_client.zero_grad()
 loss_fn(model(input), target).backward()
-s = optimizer_client.compute_stochastic_gradient_scaling_matrix_s()
+s = optimizer_client.compute_nonzero_features_on_node_phi_k(data)
 
-# send a to clients (and then on Clients)
+# on Server do 
+optimizer.get_phi_and_compute_A(list_phik_and_nk)
+
+# send phi to clients and then one every client do 
 optimizer_client.step(a)
-optimizer.compute_aggregated_scaling_matrix_a(list_of_s)
 
 # Send nk_grad from clients (1 to l) to the server
 list_nk_grad = [nk_grad1, ..., nk_gradl]
