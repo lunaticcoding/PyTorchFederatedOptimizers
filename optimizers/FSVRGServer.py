@@ -1,4 +1,5 @@
 import torch
+import numpy as np
 from optimizer import Optimizer, required
 
 
@@ -32,10 +33,19 @@ class FSVRGServer(Optimizer):
     """
 
     def __init__(self, params):
+        self.A = None
         super(FSVRGServer, self).__init__(params, dict())
 
     def __setstate__(self, state):
         super(FSVRGServer, self).__setstate__(state)
+
+    def get_phi_and_compute_A(self, phi_ks):
+        phi = sum(phi_ks)
+        #w_j = torch.Tensor(phi_ks).apply_(lambda x: 0.0 if x == 0.0 else 1.0)
+        #K = torch.full_like(w_j, len(phi_ks))
+        #a_j = K.div_(w_j)
+        #self.A = np.diag(a_j)
+        return phi
 
     def step(self, list_nk_grad, closure=None):
         """Performs a single optimization step.
