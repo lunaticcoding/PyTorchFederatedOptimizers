@@ -50,10 +50,10 @@ loss_fn(model(input), target).backward()
 s = optimizer_client.compute_nonzero_features_on_node_phi_k(data)
 
 # on Server do 
-optimizer.get_phi_and_compute_A(list_phik_and_nk)
+optimizer.get_phi_and_compute_A(list_phik)
 
 # send phi to clients and then one every client do 
-optimizer_client.step(a)
+optimizer_client.step(phi)
 
 # Send nk_grad from clients (1 to l) to the server
 list_nk_grad = [nk_grad1, ..., nk_gradl]
